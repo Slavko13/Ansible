@@ -1,0 +1,24 @@
+---
+- name: Test for test
+  hosts: all
+  become: yes
+
+
+
+  tasks:
+  
+  - block:
+  
+     - name: Ping this shit
+       ping:
+
+    when: ansible_os_family == "RedHat"
+
+
+
+  - block:
+
+     - name: Ping this shit too
+       ping:
+
+    when: ansible_os_family == "Debian"
