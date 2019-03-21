@@ -1,0 +1,9 @@
+[prod_servers]
+linux1 ansible_host=35.180.135.143
+
+
+
+
+
+[staging_servers_web]
+ubuntu ansible_host=35.180.97.201 

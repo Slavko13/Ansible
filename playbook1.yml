@@ -1,0 +1,25 @@
+---
+- name: My first playbook suka
+  hosts: all
+  become: yes
+
+
+
+  vars:
+    secret: HUI
+
+
+  tasks:
+  
+  - name: Print your pass
+    debug:
+      var: secret
+  
+
+  - name: show os_family
+    setup:
+    register: result
+    
+
+  - debug:
+      var: result.ansible_facts.ansible_os_family

@@ -1,0 +1,49 @@
+---
+- name: Apache for servers
+  hosts: staging_servers_web:prod_servers
+  become: yes
+
+  vars:
+    source_file: /home/ec2-user/MySite/index.html
+    destin_file: /var/www/html
+
+  tasks:
+    
+  - block:          #==============This block for RedHat============
+
+      - name: Install Apache for Red Hat
+        yum: name=httpd state=latest
+
+      - name: Copying file to servers
+        copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+        notify: Restart Apache for RedHat
+
+      - name: Start apache eban
+        service: name=httpd state=started enabled=yes
+
+    when: ansible_os_family == "RedHat"
+
+
+  - block:            #=====================This block for Debian==================
+
+      - name: Install Apache for Debian
+        apt: name=apache2 state=latest
+      
+
+      - name: Copying file to servers
+        copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+        notify: Restart Apache for Debian
+
+      - name: Start apache here
+        service: name=apache2 state=started enabled=yes
+
+    when: ansible_os_family == "Debian"
+
+
+  handlers:
+
+  - name: Restart Apache for RedHat
+    service: name=httpd state=restarted
+
+  - name: Restart Apache for Debian
+    service: name=apache2 state=restarted
