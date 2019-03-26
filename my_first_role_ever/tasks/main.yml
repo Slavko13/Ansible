@@ -1,0 +1,33 @@
+---
+# tasks file for my_first_role_ever
+- block:          #==============This block for RedHat============
+    - name: Install Apache for Red Hat
+      yum: name=httpd state=latest
+
+    - name: Start apache eban
+      service: name=httpd state=started enabled=yes
+
+  when: ansible_os_family == "RedHat"
+
+
+- block:            #=====================This block for Debian==================
+
+    - name: Install Apache for Debian
+      apt: name=apache2 state=latest
+
+    - name: Start apache here
+      service: name=apache2 state=started enabled=yes
+
+  when: ansible_os_family == "Debian"
+
+- name: Move all files
+  copy: src={{ item }}  dest={{ destin_folder }}  mode=0555
+  with_fileglob:
+      - "*.*"
+
+- name: Move main file
+  template: src=index.j2  dest={{ destin_folder }}/index.html  mode=0555
+  notify:
+    - Restart Apache for RedHat
+    - Restart Apache for Debian
+
